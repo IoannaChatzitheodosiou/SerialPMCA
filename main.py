@@ -29,7 +29,7 @@ def main():
         get_rms=get_rms,  # Function to calculate RMS
         get_euclidean_distance=calculate_euclidean_distance,  # Function to calculate Euclidean distance
         get_data_region=make_get_data_region(EmmissionRoi(520, 610), ExcitationRoi(440, 500)),  # Function to extract a region of interest
-        plotter=Plotter(),  # The Plotter object with plotting methods
+        plotter=Plotter(colours_file="colours.yaml", groups_config=groups_data),  # The Plotter object with plotting methods
         groups=groups_data,  # The grouped DataFrames for group-based analysis
         
     )

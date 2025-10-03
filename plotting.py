@@ -3,10 +3,34 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 from scipy.spatial.distance import cdist
-import re
+from typing import Dict
 import yaml
 
+
+
 class Plotter:
+
+    def __init__(self, colours_file: str, groups_config: Dict):
+        # Load colors from the YAML file
+        with open(colours_file, 'r') as f:
+            self._colours = yaml.safe_load(f)
+        self._groups_config = groups_config
+
+    def get_colour(self, label: str) -> str:
+        """
+        Returns the color associated with the given label from the loaded colors dictionary.
+        If the label is not found, returns a default color.
+        """
+        for group, subgroups in self._groups_config.items():
+            if label == group:
+                return self._colours.get(label,"#000000")
+            for subgroup, measurements in subgroups.items():
+                if label == subgroup:
+                    return self._colours.get(subgroup, "#000000")
+                for measurement in measurements:
+                    if label == measurement:
+                        return self._colours.get(group, "#000000")
+        return "#000000"
 
     def plot_max_values(self, max_values: dict):
         """
@@ -20,15 +44,17 @@ class Plotter:
         # Prepare labels and values for plotting
         labels = [str(label) for label in max_values.keys()]  # Ensure labels are strings
         values = list(max_values.values())
+        colors = [self.get_colour(label) for label in labels]
+
 
         # Create scatter plot
         plt.figure(figsize=(10, 6))
-        sns.barplot(x=labels, y=values, palette='viridis')
+        bars = plt.bar(labels, values, color=colors)
         plt.xticks(rotation=90, ha='right')
         plt.ylabel('Maximum Value')
         plt.title('Maximum Values for Each DataFrame')
         plt.tight_layout()
-        plt.savefig('max_values.png')  # Save plot to file
+        plt.savefig('max_values.png') # Save plot to file
         plt.show()
         plt.close()
 
