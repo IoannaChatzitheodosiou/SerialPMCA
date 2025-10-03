@@ -39,7 +39,7 @@ class DataAnalyzer:
             print(f"Completed preprocessing for {key}.")
         self.max_values()  
         self._plot_max_values_method()  
-        self._plot_euclidean_heatmap()
+        #self._plot_euclidean_heatmap()
         self._plot_eem_features()
         self._group_peak_shapes()
 
