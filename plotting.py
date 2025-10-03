@@ -26,8 +26,8 @@ def plot_max_values(max_values: dict):
     plt.ylabel('Maximum Value')
     plt.title('Maximum Values for Each DataFrame')
     plt.tight_layout()
-    plt.show()
     plt.savefig('max_values.png')  # Save plot to file
+    plt.show()
     plt.close()
 
 def plot_eem_features(x: list, y: list, labels: list, x_err: list = None, y_err: list = None, cmap: str = 'tab20'):
@@ -83,8 +83,9 @@ def plot_eem_features(x: list, y: list, labels: list, x_err: list = None, y_err:
         #                  arrowprops=dict(arrowstyle='->', color='black', lw=1))
     plt.xlabel('Peak Shape')
     plt.ylabel('RMS')
-    plt.show()
+    plt.tight_layout()
     plt.savefig('peak_shapes.png')  # Save plot to file
+    plt.show()
     plt.close()
 
 def plot_euclidean_heatmap(data: pd.DataFrame):
@@ -92,8 +93,9 @@ def plot_euclidean_heatmap(data: pd.DataFrame):
     Plots a heatmap of the provided data using Euclidean distances.
     """
     sns.heatmap(pd.DataFrame(data), annot=True, cmap='viridis')
-    plt.show()
+    plt.tight_layout()
     plt.savefig('euclidean_map.png')  # Save plot to file
+    plt.show()
     plt.close()
 
 def plot_grouped_heatmap(data: pd.DataFrame, labels: list):
@@ -129,6 +131,6 @@ def plot_grouped_heatmap(data: pd.DataFrame, labels: list):
     plt.ylabel('Group')
     plt.xlabel('Group')
     plt.tight_layout()
-    plt.show()
     plt.savefig('grouped_heatmap.png')  # Save plot to file
+    plt.show()
     plt.close()
