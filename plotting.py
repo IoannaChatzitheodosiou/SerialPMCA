@@ -21,6 +21,7 @@ class Plotter:
         Returns the color associated with the given label from the loaded colors dictionary.
         If the label is not found, returns a default color.
         """
+        label = label.split('/')[0]
         for group, subgroups in self._groups_config.items():
             if label == group:
                 return self._colours.get(label,"#000000")
@@ -28,7 +29,7 @@ class Plotter:
                 if label == subgroup:
                     return self._colours.get(subgroup, "#000000")
                 for measurement in measurements:
-                    if label == measurement:
+                    if label.split('_')[0] == measurement.split('_')[0]:
                         return self._colours.get(group, "#000000")
         return "#000000"
 
@@ -65,13 +66,13 @@ class Plotter:
         """
         # Extract group from label (assumes label format 'group_row')
         groups = [str(label).split('_')[0] for label in labels]
+        print (labels)
+        print (groups)
         df = pd.DataFrame({'x': x, 'y': y, 'label': labels, 'group': groups})
-
+        # Assign a color to each group using the specified colormap
+        unique_groups = df['group'].unique()
+        group_color_map = {group: self.get_colour(group) for group in unique_groups}
         if x_err is not None and y_err is not None:
-            # Assign a color to each group using the specified colormap
-            unique_groups = df['group'].unique()
-            palette = sns.color_palette("tab20", n_colors=len(unique_groups))
-            group_color_map = {g: palette[i] for i, g in enumerate(unique_groups)}
             # Plot error bars for each group
             for g in unique_groups:
                 idx = df['group'] == g
@@ -81,7 +82,7 @@ class Plotter:
             plt.legend(title='Group')
         else:
             # Plot scatter plot with group coloring
-            sns.scatterplot(data=df, x='x', y='y', hue='group')
+            sns.scatterplot(data=df, x='x', y='y', hue='group', palette=group_color_map)
             # # Annotate each point with its label
             # for xi, yi, label in zip(df['x'], df['y'], df['label']):
             #     plt.text(xi, yi, label, fontsize=9, ha='right', va='bottom')
