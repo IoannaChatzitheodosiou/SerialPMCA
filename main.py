@@ -1,7 +1,7 @@
 from analysing import DataAnalyzer
 from processing import preprocess_data, get_max_values,get_peak_shape, get_rms, calculate_euclidean_distance, make_get_peak_shape, EmmissionRoi, ExcitationRoi, make_get_data_region
 from read_data import read_data
-from plotting import plot_max_values, plot_eem_features, plot_euclidean_heatmap, plot_grouped_heatmap
+from plotting import Plotter
 import numpy as np
 import yaml
 
@@ -25,13 +25,11 @@ def main():
         data=data,  # The dictionary of DataFrames loaded from data.yaml
         get_max_values=get_max_values,  # Function to get max values from each DataFrame
         preprocess=preprocess_data,  # Function to preprocess each DataFrame
-        plot_max_values=plot_max_values,  # Function to plot max values
         get_peak_shape=make_get_peak_shape(EmmissionRoi(510, 554), EmmissionRoi(556, 650)),  # Function to calculate peak shape
         get_rms=get_rms,  # Function to calculate RMS
         get_euclidean_distance=calculate_euclidean_distance,  # Function to calculate Euclidean distance
         get_data_region=make_get_data_region(EmmissionRoi(520, 610), ExcitationRoi(440, 500)),  # Function to extract a region of interest
-        plot_eem_features=plot_eem_features,  # Function to plot EEM features
-        plot_euclidean_map=plot_euclidean_heatmap,  # Function to plot the Euclidean heatmap
+        plotter=Plotter(),  # The Plotter object with plotting methods
         groups=groups_data,  # The grouped DataFrames for group-based analysis
         
     )

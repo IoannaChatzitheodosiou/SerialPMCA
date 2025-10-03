@@ -4,13 +4,13 @@ from typing import Dict, Callable, List
 import seaborn as sns
 import matplotlib.pyplot as plt
 from dataclasses import dataclass
+from plotting import Plotter
 
 class DataAnalyzer:
     def __init__(self, data: Dict[str, pd.DataFrame], get_max_values: Callable, preprocess: Callable, 
                  get_peak_shape: Callable, get_rms: Callable, 
                  get_euclidean_distance: Callable, get_data_region: Callable,
-                 plot_euclidean_map: Callable, plot_eem_features: Callable, plot_max_values: Callable,
-                 groups: dict = None):
+                 plotter: Plotter ,groups: dict = None):
         """
         Initialize the DataAnalyzer.
         data: Dictionary of DataFrames (or lists of DataFrames) keyed by sample name.
@@ -23,12 +23,10 @@ class DataAnalyzer:
         self._get_rms = get_rms
         self._get_euclidean_distance = get_euclidean_distance
         self._get_data_region = get_data_region
-        self._plot_euclidean_map_imp = plot_euclidean_map
-        self._plot_eem_features_imp = plot_eem_features
         self._get_max_values = get_max_values
+        self._plotter = plotter
         self._groups = groups  # Store group information if provided
         self._max_values = {}  # Dictionary to store {name: max} for each DataFrame
-        self._plot_max_values = plot_max_values  # Function to plot max values
 
     def analyze(self):
         for key, df in self._data.items():
@@ -53,7 +51,7 @@ class DataAnalyzer:
             print(f"{key}: {max_val}")
 
     def _plot_max_values_method(self):
-        self._plot_max_values(self._max_values)
+        self._plotter.plot_max_values(self._max_values)
 
     def _plot_euclidean_heatmap(self):
         # Build a pairwise distance matrix between all DataFrames in self._data
@@ -65,7 +63,7 @@ class DataAnalyzer:
                 data1[key2] = self._get_euclidean_distance(df1, df2)
             data[key1] = data1  # Store the row for key1
         # Convert the nested dictionary to a DataFrame and plot the heatmap
-        self._plot_euclidean_map_imp(pd.DataFrame(data))
+        self._plotter.plot_euclidean_heatmap(pd.DataFrame(data))
 
 
     def _plot_eem_features(self):
@@ -79,7 +77,7 @@ class DataAnalyzer:
             y.append(self._get_rms(df))
             labels.append(key)
         # Call the plotting function with the computed values and labels
-        self._plot_eem_features_imp(x, y, labels)
+        self._plotter.plot_eem_features(x, y, labels)
 
     def _group_peak_shapes(self):
         @dataclass
@@ -118,10 +116,10 @@ class DataAnalyzer:
                 group_plot.populate(peak_shapes_group, rms_values_group, group)
         # Call the plotting function with the averaged values and group labels
         # You can use x_err and y_err for error bars in your plotting function
-        self._plot_eem_features_imp(subgroup_plot.peak, subgroup_plot.rms, subgroup_plot.labels)
-        self._plot_eem_features_imp(subgroup_plot.peak, subgroup_plot.rms, subgroup_plot.labels, 
+        self._plotter.plot_eem_features(subgroup_plot.peak, subgroup_plot.rms, subgroup_plot.labels)
+        self._plotter.plot_eem_features(subgroup_plot.peak, subgroup_plot.rms, subgroup_plot.labels, 
                                     subgroup_plot.peak_err, subgroup_plot.rms_err)
-        self._plot_eem_features_imp(group_plot.peak, group_plot.rms, group_plot.labels)
-        self._plot_eem_features_imp(group_plot.peak, group_plot.rms, group_plot.labels,
+        self._plotter.plot_eem_features(group_plot.peak, group_plot.rms, group_plot.labels)
+        self._plotter.plot_eem_features(group_plot.peak, group_plot.rms, group_plot.labels,
                                     group_plot.peak_err, group_plot.rms_err)
         
