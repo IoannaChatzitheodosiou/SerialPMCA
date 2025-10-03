@@ -125,4 +125,3 @@ class DataAnalyzer:
         self._plot_eem_features_imp(group_plot.peak, group_plot.rms, group_plot.labels,
                                     group_plot.peak_err, group_plot.rms_err)
         
-        #this is to show I am on trials
