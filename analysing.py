@@ -122,4 +122,5 @@ class DataAnalyzer:
         self._plotter.plot_eem_features(group_plot.peak, group_plot.rms, group_plot.labels)
         self._plotter.plot_eem_features(group_plot.peak, group_plot.rms, group_plot.labels,
                                     group_plot.peak_err, group_plot.rms_err)
+        self._plotter.plot_grouped_heatmap(group_plot.peak, group_plot.rms, group_plot.labels)
         

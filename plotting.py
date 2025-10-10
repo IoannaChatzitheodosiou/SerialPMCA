@@ -55,7 +55,7 @@ class Plotter:
         plt.ylabel('Maximum Value')
         plt.title('Maximum Values for Each DataFrame')
         plt.tight_layout()
-        plt.savefig('max_values.png') # Save plot to file
+        plt.savefig('max_values.pdf') # Save plot to file
         plt.show()
         plt.close()
 
@@ -66,8 +66,6 @@ class Plotter:
         """
         # Extract group from label (assumes label format 'group_row')
         groups = [str(label).split('_')[0] for label in labels]
-        print (labels)
-        print (groups)
         df = pd.DataFrame({'x': x, 'y': y, 'label': labels, 'group': groups})
         # Assign a color to each group using the specified colormap
         unique_groups = df['group'].unique()
@@ -113,7 +111,7 @@ class Plotter:
         plt.xlabel('Peak Shape')
         plt.ylabel('RMS')
         plt.tight_layout()
-        plt.savefig('peak_shapes.png')  # Save plot to file
+        plt.savefig('peak_shapes.pdf')  # Save plot to file
         plt.show()
         plt.close()
 
@@ -123,26 +121,22 @@ class Plotter:
         """
         sns.heatmap(pd.DataFrame(data), annot=True, cmap='viridis')
         plt.tight_layout()
-        plt.savefig('euclidean_map.png')  # Save plot to file
+        plt.savefig('euclidean_map.pdf')  # Save plot to file
         plt.show()
         plt.close()
 
-    def plot_grouped_heatmap(self, data: pd.DataFrame, labels: list):
+    def plot_grouped_heatmap(self, x: list, y: list, labels: list):
         """
         Plots a heatmap where each cell is the mean of the group (grouped by the prefix before '_').
         data: pd.DataFrame or np.ndarray (samples x features)
         labels: list of sample labels, format 'group_row' or similar
         """
         # Extract group from groups.yaml (assumes groups.yaml contains a mapping from label to group)
-        with open('groups.yaml', 'r') as f:
-            group_map = yaml.safe_load(f)
-        # Map each label to its group
-        groups = [group_map.get(label, label) for label in labels]
-        df = pd.DataFrame(data)
-        df['group'] = groups
+        # Extract group from label (assumes label format 'group_row')
+        groups = [str(label).split('_')[0] for label in labels]
+        df = pd.DataFrame({'x': x, 'y': y, 'label': labels, 'group': groups})
         # Group by 'group' and average all columns except 'group'
         group_means = df.groupby('group').mean(numeric_only=True)
-        print (df.groupby)
 
         # # Compute pairwise Euclidean distances between group means
         group_names = sorted(group_means.index.tolist())
@@ -157,6 +151,6 @@ class Plotter:
         plt.ylabel('Group')
         plt.xlabel('Group')
         plt.tight_layout()
-        plt.savefig('grouped_heatmap.png')  # Save plot to file
+        plt.savefig('grouped_heatmap.pdf')  # Save plot to file
         plt.show()
         plt.close()
