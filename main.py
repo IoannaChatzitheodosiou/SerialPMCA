@@ -25,7 +25,7 @@ def main():
         data=data,  # The dictionary of DataFrames loaded from data.yaml
         get_max_values=get_max_values,  # Function to get max values from each DataFrame
         preprocess=preprocess_data,  # Function to preprocess each DataFrame
-        get_peak_shape=make_get_peak_shape(EmmissionRoi(510, 554), EmmissionRoi(556, 650)),  # Function to calculate peak shape
+        get_peak_shape=make_get_peak_shape(EmmissionRoi(515, 558), EmmissionRoi(560, 650)),  # Function to calculate peak shape
         get_rms=get_rms,  # Function to calculate RMS
         get_euclidean_distance=calculate_euclidean_distance,  # Function to calculate Euclidean distance
         get_data_region=make_get_data_region(EmmissionRoi(520, 610), ExcitationRoi(440, 500)),  # Function to extract a region of interest
